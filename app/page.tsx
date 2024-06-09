@@ -19,30 +19,38 @@ export default async function Home() {
     const result = await client.query(`SELECT * FROM bill`)
     client.release()
     return (
-      <div className='px-5 flex flex-col'>
-        <div className="grid grid-rows-* grid-cols-7">
+      <div className='px-4 sm:px-10 md:px-20 xl:px-24 flex flex-col'>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5">
           <div>Date</div>
           <div>Electricity</div>
           <div>Gaz</div>
           <div>Electricity Difference</div>
           <div>Gaz Difference</div>
           <div>Gaz kWh</div>
-          <div></div>       
-          {result.rows.map((item: BillObj) => {
-            totalEl = checks(item.el_cons, initVals.may24.elCons, totalEl)
-            totalGaz = checks(item.gaz_cons, initVals.may24.gazCons, totalGaz)
-            return (
-            <Fragment key={item.id}>
+          <div></div>
+        </div>    
+        <hr className="h-px my-1 mt-5 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+        {result.rows.map((item: BillObj) => {
+          totalEl = checks(item.el_cons, initVals.may24.elCons, totalEl)
+          totalGaz = checks(item.gaz_cons, initVals.may24.gazCons, totalGaz)
+          return (
+            <Fragment key={item.id} >
+            <div className="grid grid-rows-* grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 mt-8">
               <div>{new Date(item.dateBill).toLocaleDateString()}</div>
               <div>{item.el_cons}</div>
               <div>{item.gaz_cons}</div>
               <div>{+item.el_cons - +initVals.may24.elCons}</div>
               <div>{+item.gaz_cons - +initVals.may24.gazCons}</div>
               <div>{Math.round((+item.gaz_cons - +initVals.may24.gazCons) * +initVals.conversion).toFixed(2)}</div>
-              <DeleteButton id={item.id} />
-            </Fragment>
-          )})}
-        </div>
+              <div className='flex gap-5'>
+                <DeleteButton id={item.id} />
+                <DeleteButton id={item.id} />
+              </div>              
+            </div>
+            <hr className="h-px mt-7 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+          </Fragment>
+        )})}
+        
 
         <div className='mt-5'>Total: {Math.round(+Math.round(totalEl * initVals.may24.elTarif).toFixed(2) + +Math.round(totalGaz * initVals.conversion * initVals.may24.gazTarif).toFixed(2)).toFixed(2)}€</div>
         <div>Electricity total: {Math.round(totalEl * initVals.may24.elTarif).toFixed(2)}€</div>

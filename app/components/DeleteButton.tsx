@@ -6,7 +6,7 @@ function DeleteButton({ id } : {id: string}) {
 
     const handleDelete = async (id: string) => {
         try {
-            const response = await fetch('/api/deleteBill', {
+            const response = await fetch('/api/methodsBill', {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ function DeleteButton({ id } : {id: string}) {
           }
     }
     return (
-        <div onClick={() => handleDelete(id)}>X</div>
+        <div onClick={() => handleDelete(id)} className='w-auto bg-red-500 py-2 px-4 rounded text-white hover:bg-red-400 cursor-pointer'>Delete</div>
     )
 }
 
