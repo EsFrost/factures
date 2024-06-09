@@ -41,6 +41,26 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Unknown error occurred' }, { status: 500 })
     }
   }
+}
 
-  
+export async function POST(request: NextRequest) {
+  const {id, el_cons, gaz_cons, dateInput} = await request.json()
+
+  try {
+    const client = await pool.connect()
+    const result = await client.query('INSERT INTO bill ("id", "dateBill", "el_cons", "gaz_cons") VALUES ($1, $2, $3, $4)', [id, dateInput, el_cons, gaz_cons])
+    client.release()
+
+    return NextResponse.json({ success: true, result })
+  }
+  catch (err: unknown ){
+    if (err instanceof Error) {
+      console.error(err)
+      return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    }
+    else {
+      console.error('Unknown error', err)
+      return NextResponse.json({ success: false, error: 'Unknown error occurred' }, { status: 500 })
+    }
+  }
 }
