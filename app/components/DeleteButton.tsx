@@ -1,35 +1,38 @@
 'use client'
 import React, { useState } from 'react'
+import Button from './Button';
 
-function DeleteButton({ id } : {id: string}) {
-    const [deleteStatus, setDeleteStatus] = useState<string | null>(null);
+function DeleteButton({ id, className } : {id: string, className?: string}) {
+  const [deleteStatus, setDeleteStatus] = useState<string | null>(null)
 
-    const handleDelete = async (id: string) => {
-        try {
-            const response = await fetch('/api/methodsBill', {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ id }),
-            })
-      
-            const data = await response.json();
-      
-            if (data.success) {
-              setDeleteStatus('Delete successful');
-              window.location.reload()
-            } else {
-              setDeleteStatus('Delete failed');
-            }
-          } catch (err) {
-            console.error(err);
-            setDeleteStatus('Error occurred');
+  const handleDelete = async (id: string) => {
+      try {
+          const response = await fetch('/api/methodsBill', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }),
+          })
+    
+          const data = await response.json()
+    
+          if (data.success) {
+            setDeleteStatus('Delete successful')
+            window.location.reload()
+          } else {
+            setDeleteStatus('Delete failed')
           }
-    }
-    return (
-        <div onClick={() => handleDelete(id)} className='w-auto bg-red-500 py-2 px-4 rounded text-white hover:bg-red-400 cursor-pointer'>Delete</div>
-    )
+        } catch (err) {
+          console.error(err);
+          setDeleteStatus('Error occurred')
+        }
+  }
+  return (
+
+    <Button text={'Delete'} onClick={() => handleDelete(id)} className={className} />
+        
+  )
 }
 
 export default DeleteButton

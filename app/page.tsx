@@ -3,6 +3,7 @@ import pool from './lib/db'
 import { BillObj } from './utils/db_obj'
 import initVals from './utils/initial_values'
 import DeleteButton from './components/DeleteButton'
+import EditButton from './components/EdtiButton'
 
 const checks = (val1: number, val2: number, val3: number) => {
  if ((val1 - val2) > val3) {
@@ -44,7 +45,7 @@ export default async function Home() {
               <div>{Math.round((+item.gaz_cons - +initVals.may24.gazCons) * +initVals.conversion).toFixed(2)}</div>
               <div className='flex gap-5'>
                 <DeleteButton id={item.id} />
-                <DeleteButton id={item.id} />
+                <EditButton id={item.id} el_cons={1} gaz_cons={2} className={'bg-blue-700 hover:bg-blue-400'} />
               </div>              
             </div>
             <hr className="h-px mt-7 bg-gray-200 border-0 dark:bg-gray-700"></hr>
