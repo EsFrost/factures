@@ -3,7 +3,7 @@ import pool from './lib/db'
 import { BillObj } from './utils/db_obj'
 import initVals from './utils/initial_values'
 import DeleteButton from './components/DeleteButton'
-import EditButton from './components/EdtiButton'
+import Link from 'next/link'
 
 const checks = (val1: number, val2: number, val3: number) => {
  if ((val1 - val2) > val3) {
@@ -44,8 +44,11 @@ export default async function Home() {
               <div>{+item.gaz_cons - +initVals.may24.gazCons}</div>
               <div>{Math.round((+item.gaz_cons - +initVals.may24.gazCons) * +initVals.conversion).toFixed(2)}</div>
               <div className='flex gap-5'>
-                <DeleteButton id={item.id} />
-                <EditButton id={item.id} el_cons={1} gaz_cons={2} className={'bg-blue-800 hover:bg-blue-500'} />
+                <DeleteButton id={item.id} className={'w-auto bg-red-500 hover:bg-red-400'} />
+                <Link href={{
+                  pathname: `/edit/${item.id}`,
+                  query: { id: item.id}
+                }} className='py-2 px-4 rounded text-white cursor-pointer bg-blue-800 hover:bg-blue-500 w-auto'>Edit</Link>
               </div>              
             </div>
             <hr className="h-px mt-7 bg-gray-200 border-0 dark:bg-gray-700"></hr>
@@ -56,6 +59,7 @@ export default async function Home() {
         <div className='mt-5'>Total: {Math.round(+Math.round(totalEl * initVals.may24.elTarif).toFixed(2) + +Math.round(totalGaz * initVals.conversion * initVals.may24.gazTarif).toFixed(2)).toFixed(2)}€</div>
         <div>Electricity total: {Math.round(totalEl * initVals.may24.elTarif).toFixed(2)}€</div>
         <div>Gaz total: {Math.round(totalGaz * initVals.conversion * initVals.may24.gazTarif).toFixed(2)}€</div>
+        <Link href='/add' className='py-2 px-4 rounded text-white cursor-pointer bg-green-800 hover:bg-green-400 w-20 text-center mb-4'>Add</Link>
       </div>
     )
   }
@@ -63,3 +67,5 @@ export default async function Home() {
     console.log('There was an error with connecting to the database: ', err)
   }
 }
+
+// <EditButton id={item.id} el_cons={1} gaz_cons={2} className={'w-auto bg-blue-800 hover:bg-blue-500'} />
